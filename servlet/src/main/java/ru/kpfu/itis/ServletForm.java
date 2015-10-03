@@ -28,15 +28,15 @@ public class ServletForm extends HttpServlet {
         resp.sendRedirect("\\form");
         resp.setContentType("text/html");
         resp.setCharacterEncoding("utf-8");
-        doGet(req,resp);
-        writeToFile(req.getParameter("email"), req.getParameter("password"), req.getParameter("checkbox"));
+        doGet(req, resp);
+        writeToFile(req.getParameter("email"), req.getParameter("password"), req.getParameter("gender"), req.getParameter("checkbox"));
     }
 
     /**
      * @return true, if email doesn't exist and writing successful
      * else false
      */
-    protected void writeToFile(String email, String password, String checkbox_st){
+    protected void writeToFile(String email, String password, String pol, String checkbox_st) {
         StringBuilder sb = new StringBuilder();
 
         try(Scanner sc = new Scanner(DATA)) {
@@ -52,7 +52,7 @@ public class ServletForm extends HttpServlet {
             if (checkbox_st == null){
                 checkbox_st = "off";
             }
-            pw.printf("%30s\t%20s\t%3s",email,password,checkbox_st);
+            pw.printf("%30s\t%20s\t%7s\t%3s", email, password, pol, checkbox_st);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
