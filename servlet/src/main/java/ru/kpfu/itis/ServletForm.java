@@ -52,7 +52,10 @@ public class ServletForm extends HttpServlet {
             if (checkbox_st == null){
                 checkbox_st = "off";
             }
-            pw.printf("%30s\t%20s\t%7s\t%3s", email, password, pol, checkbox_st);
+            if (pol == null) {
+                pol = "unknown";
+            }
+            pw.printf("%30s\t%20s\t%10s\t%5s", email, password, pol, checkbox_st);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -61,15 +64,15 @@ public class ServletForm extends HttpServlet {
     protected String getHTMLCode(){
         StringBuilder sb = new StringBuilder();
         sb.append("<!DOCTYPE html>\n");
-        sb.append("<html> <head><title>My Task</title></head>");
+        sb.append("<html> <head><title>My Task</title> <meta charset=\"utf-8\"/></head>");
         sb.append("<body>");
         sb.append("<form action=\"\\form\" method=\"POST\">");
         sb.append("<p>Email:<br><input type=\"email\" name=\"email\" required placeholder=\"example@mailbox.ru\"></p>");
         sb.append("<p>Password:<br><input id=\"pass\" type=\"password\" name=\"password\" value=\"\" required placeholder=\"password\"></p>");
-        sb.append("<p><br><br><select id=\"selecter\" size=\"1\" name=\"gender\">");
+        sb.append("<p><br><br><select required id=\"selecter\" size=\"1\" name=\"gender\">");
         sb.append("<option selected disabled>выберите пол</option>");
-        sb.append("<option>мужской</option>");
-        sb.append("<option>женский</option>");
+        sb.append("<option>male</option>");
+        sb.append("<option>female</option>");
         sb.append("</select></p><p><br>");
         sb.append("<input type=\"checkbox\" name=\"checkbox\" style=\"height:15px; width:20px;\">Подписаться на новости</input></p>");
         sb.append("<p><input id=\"submit\" type=\"submit\" value=\"Отправить\"></form></p><p></p></form>");
