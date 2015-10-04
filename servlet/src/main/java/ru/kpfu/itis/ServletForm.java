@@ -13,23 +13,27 @@ import java.util.Scanner;
 
 public class ServletForm extends HttpServlet {
 
-    //database file, where storing email, password, checkbox status
+    //database file, where storing email, password, gender, checkbox status
     public static final File DATA = new File("/Users/Ramil/Desktop/data.txt");
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("text/html");
         resp.setCharacterEncoding("utf-8");
-        resp.getWriter().println(getHTMLCode());
+        resp.getWriter().println(getHTMLCode(""));
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.sendRedirect("\\form");
         resp.setContentType("text/html");
         resp.setCharacterEncoding("utf-8");
-        doGet(req, resp);
-        writeToFile(req.getParameter("email"), req.getParameter("password"), req.getParameter("gender"), req.getParameter("checkbox"));
+        if (new EmailChecker(DATA, req.getParameter("email")).check()) {
+            resp.sendRedirect("\\form");
+            resp.getWriter().println(getHTMLCode(""));
+            writeToFile(req.getParameter("email"), req.getParameter("password"), req.getParameter("gender"), req.getParameter("checkbox"));
+        } else {
+            resp.getWriter().println(getHTMLCode("This email address is used!!!"));
+        }
     }
 
     /**
@@ -61,7 +65,7 @@ public class ServletForm extends HttpServlet {
         }
     }
 
-    protected String getHTMLCode(){
+    protected String getHTMLCode(String str) {
         StringBuilder sb = new StringBuilder();
         sb.append("<!DOCTYPE html>\n");
         sb.append("<html> <head><title>My Task</title> <meta charset=\"utf-8\"/></head>");
@@ -76,6 +80,7 @@ public class ServletForm extends HttpServlet {
         sb.append("</select></p><p><br>");
         sb.append("<input type=\"checkbox\" name=\"checkbox\" style=\"height:15px; width:20px;\">Подписаться на новости</input></p>");
         sb.append("<p><input id=\"submit\" type=\"submit\" value=\"Отправить\"></form></p><p></p></form>");
+        sb.append("<p>").append(str).append("</p>");
         sb.append("</body>");
         sb.append("</html>");
         return sb.toString();
