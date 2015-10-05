@@ -36,10 +36,6 @@ public class ServletForm extends HttpServlet {
         }
     }
 
-    /**
-     * @return true, if email doesn't exist and writing successful
-     * else false
-     */
     protected void writeToFile(String email, String password, String pol, String checkbox_st) {
         StringBuilder sb = new StringBuilder();
 
